@@ -1,8 +1,18 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
-#define NUMBER_OF_STRING 42
+#define NUMBER_OF_STRING 30
 #define MAX_STRING_SIZE 50
+
+char units[NUMBER_OF_STRING][MAX_STRING_SIZE] = 
+{ "celsius","fahrenheit","kelvin",
+  "kilogram","gram","milligram","microgram","ton","kiloton","ounce","pound","stone",
+  "kilometer","meter","centimeter","millimeter","inch","foot","yard","mile" ,"league",
+  "second","minute","hour","day","week","month","year","decade","century"
+};
+
+int isValid(char* unit);
 
 int main(int argc, char *argv[]){
 
@@ -24,12 +34,6 @@ int main(int argc, char *argv[]){
 		     "|                                                                            |\n"
 		     " -----------------------------------------------------------------------------\n";
 
-	char* units[NUMBER_OF_STRING][MAX_STRING_SIZE] = 
-	{ "Celsius","Fahrenheit","Kelvin",
-	  "Kilogram","Gram","Milligram","Microgram","Ton","Kiloton","Ounce","Pound","Stone",
-	  "Kilometer","Meter","Centimeter","Millimeter","Inch","Foot","Yard","Mile" ,"League",
-	  "Second","Minute","Hour","Day","Week","Month","Year","Decade","Century"
-	};
 	// 0 for Temperature, 1 for Mass, 2 for Distance and 3 for Time
 	int id[30] =
 	{ 0, 0, 0,
@@ -42,21 +46,22 @@ int main(int argc, char *argv[]){
 	char amount[MAX_STRING_SIZE];
 	int c,i;
 
-	i = 0;
-	//Main loop that process user input
-	while(c != 'y'){
+	// Main loop that process user input
+	while(c != 'n'){
 
-		//Gather user input and store into appropriate arrays
+		i = 0;
+		// Gather user input and store into appropriate arrays
 		printf("Convert from: ");
-		while((c = getchar()) != EOF || c != '\n'){
+		while((c = getchar()) != EOF && c != '\n'){
 
 			oldUnit[i] = c;
 			++i;
 		}
 		oldUnit[i] = '\0';
+		printf("Is %s a valid unit: %d\n",oldUnit,isValid(oldUnit));
 		i = 0;
 		printf("\nInto: ");
-		while((c = getchar()) != EOF || c != '\n'){
+		while((c = getchar()) != EOF && c != '\n'){
 
 			newUnit[i] = c;
 			++i;
@@ -64,7 +69,7 @@ int main(int argc, char *argv[]){
 		newUnit[i] = '\0';
 		i = 0;
 		printf("\nBy how many: ");
-		while((c = getchar()) != EOF || c != '\n'){
+		while((c = getchar()) != EOF && c != '\n'){
 
 			amount[i] = c;
 			++i;
@@ -78,10 +83,36 @@ int main(int argc, char *argv[]){
 			printf("Do you want to do another conversion? (y/n): ");
 			c = getchar();
 			c = tolower(c);
-			if(c != 'y' || c != 'n')
-				printf("Invalid response. Please try again.");
+			if(c != 'y' && c != 'n'){
+				printf("\nInvalid response. Please try again.\n");
+				// Consume the newline character
+				c = getchar();
+			}
+		}while(c != 'y' && c != 'n');
+		if(c == 'y'){
+			// Consume the newline character
+			c = getchar();
+		}
+	}
+	return 0;
+}
 
-		}while(c != 'y' | c != 'n');
+// Returns 1 as true and 0 as false
+int isValid(char* unit){
+
+	int size = strlen(unit) - 1;
+	int i;
+
+	if(strcmp("celsius",unit) == 0){
+		return 1;
+	}else{
+		if(unit[size] == 's'){
+			size = size - 1;
+		}
+		for(i = 0; i < NUMBER_OF_STRING; ++i){
+			if(strncmp(units[i],unit,size) == 0)
+				return 1;
+		}
 	}
 	return 0;
 }
