@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define NUMBER_OF_STRING 30
 #define MAX_STRING_SIZE 50
@@ -44,49 +45,59 @@ int main(int argc, char *argv[]){
 	char oldUnit[MAX_STRING_SIZE];
 	char newUnit[MAX_STRING_SIZE];
 	char amount[MAX_STRING_SIZE];
-	int c,i;
+	char programResponse[3][MAX_STRING_SIZE] = {
+		"Convert from: ", "Into: ", "By how many: "
+	};
+	char userResponse[3][MAX_STRING_SIZE];
+
+	int c,i,j,k;
+	int flag;
 
 	// Main loop that process user input
 	while(c != 'n'){
+		for(i = 0; i < 3; ++i){
+			flag = 0;
+			do{
+				j = 0;
+				printf("%s",programResponse[i]);
+				while((c = getchar()) != EOF && c != '\n'){
+					userResponse[i][j] = c;
+					++j;
+				}
+				userResponse[i][j] = '\0';
+				// Convert all leters to lowercase
+				for(k = 0; k < j; ++k){
+					userResponse[i][k] = tolower(userResponse[i][k]);
+				}
+				if(strcmp(userResponse[i],"quit") == 0)
+					return 0;
+				else if(strcmp(userResponse[i],"help") == 0)
+					printf("%s",help);
+				else if(!isValid(userResponse[i]) && i < 2){
+					printf("\"%s\" is not a valid response. Please type in a valid response.\n",userResponse[i]);
+					printf("For a list of valid options type \"help\". To exit the program type \"quit\"\n");
 
-		i = 0;
-		// Gather user input and store into appropriate arrays
-		printf("Convert from: ");
-		while((c = getchar()) != EOF && c != '\n'){
-
-			oldUnit[i] = c;
-			++i;
+					flag = 0;
+				}else if(i == 2 && atof(userResponse[i]) == 0){
+					printf("Please enter a valid number\n");
+				}else
+					flag = 1;
+			}while(!flag);
 		}
-		oldUnit[i] = '\0';
-		printf("Is %s a valid unit: %d\n",oldUnit,isValid(oldUnit));
-		i = 0;
-		printf("\nInto: ");
-		while((c = getchar()) != EOF && c != '\n'){
 
-			newUnit[i] = c;
-			++i;
-		}
-		newUnit[i] = '\0';
-		i = 0;
-		printf("\nBy how many: ");
-		while((c = getchar()) != EOF && c != '\n'){
-
-			amount[i] = c;
-			++i;
-		}
-		amount[i] = '\0';
-		printf("1: %s\n",oldUnit);
-		printf("2: %s\n",newUnit);
-		printf("3: %s\n",amount);
-
+		printf("1: %s\n",userResponse[0]);
+		printf("2: %s\n",userResponse[1]);
+		printf("3: %s\n",userResponse[2]);
 		do{
 			printf("Do you want to do another conversion? (y/n): ");
 			c = getchar();
 			c = tolower(c);
 			if(c != 'y' && c != 'n'){
-				printf("\nInvalid response. Please try again.\n");
-				// Consume the newline character
-				c = getchar();
+				printf("Invalid response. Please try again.\n");
+				// Consume all input in the stdin buffer
+				while((c = getchar()) != EOF && c != '\n'){
+					;
+				}
 			}
 		}while(c != 'y' && c != 'n');
 		if(c == 'y'){
@@ -102,15 +113,18 @@ int isValid(char* unit){
 
 	int size = strlen(unit) - 1;
 	int i;
+	char temp[MAX_STRING_SIZE];
 
+   	memset(temp, '\0', sizeof(temp));
 	if(strcmp("celsius",unit) == 0){
 		return 1;
 	}else{
 		if(unit[size] == 's'){
 			size = size - 1;
 		}
+		strncpy(temp,unit,size+1);
 		for(i = 0; i < NUMBER_OF_STRING; ++i){
-			if(strncmp(units[i],unit,size) == 0)
+			if(strcmp(units[i],temp) == 0)
 				return 1;
 		}
 	}
