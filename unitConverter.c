@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include "header.h"
 
 #define NUMBER_OF_STRING 30
 #define MAX_STRING_SIZE 50
@@ -13,7 +14,13 @@ char units[NUMBER_OF_STRING][MAX_STRING_SIZE] =
   "second","minute","hour","day","week","month","year","decade","century"
 };
 
-int isValid(char* unit);
+// 0 for Temperature, 1 for Mass, 2 for Distance and 3 for Time
+int id[30] =
+{ 0, 0, 0,
+  1, 1, 1, 1, 1, 1, 1, 1, 1,
+  2, 2, 2, 2, 2, 2, 2, 2, 2,
+  3, 3, 3, 3, 3, 3, 3, 3, 3
+};
 
 int main(int argc, char *argv[]){
 
@@ -35,13 +42,6 @@ int main(int argc, char *argv[]){
 		     "|                                                                            |\n"
 		     " -----------------------------------------------------------------------------\n";
 
-	// 0 for Temperature, 1 for Mass, 2 for Distance and 3 for Time
-	int id[30] =
-	{ 0, 0, 0,
-	  1, 1, 1, 1, 1, 1, 1, 1, 1,
-	  2, 2, 2, 2, 2, 2, 2, 2, 2,
-	  3, 3, 3, 3, 3, 3, 3, 3, 3
-	};
 	char oldUnit[MAX_STRING_SIZE];
 	char newUnit[MAX_STRING_SIZE];
 	char amount[MAX_STRING_SIZE];
@@ -52,7 +52,8 @@ int main(int argc, char *argv[]){
 
 	int c,i,j,k;
 	int flag;
-
+	int unitID;
+	double result;
 	// Main loop that process user input
 	while(c != 'n'){
 		for(i = 0; i < 3; ++i){
@@ -60,6 +61,7 @@ int main(int argc, char *argv[]){
 			do{
 				j = 0;
 				printf("%s",programResponse[i]);
+				//Gather all input from the stdin
 				while((c = getchar()) != EOF && c != '\n'){
 					userResponse[i][j] = c;
 					++j;
@@ -76,8 +78,13 @@ int main(int argc, char *argv[]){
 				else if(!isValid(userResponse[i]) && i < 2){
 					printf("\"%s\" is not a valid response. Please type in a valid response.\n",userResponse[i]);
 					printf("For a list of valid options type \"help\". To exit the program type \"quit\"\n");
-
-					flag = 0;
+				}else if(isValid(userResponse[i])&& i == 1){ // Check to see if user is asking of a conversion of differnt units
+					unitID = isSameUnit(userResponse[i-1],userResponse[i]);
+					if(unitID < 0){
+						printf("Can not convert \"%s\" into \"%s\". Please type in a valid response.\n",userResponse[i-1],userResponse[i]);
+						printf("For a list of valid options type \"help\". To exit the program type \"quit\"\n");
+					}else
+						flag = 1;
 				}else if(i == 2 && atof(userResponse[i]) == 0){
 					printf("Please enter a valid number\n");
 				}else
@@ -88,6 +95,24 @@ int main(int argc, char *argv[]){
 		printf("1: %s\n",userResponse[0]);
 		printf("2: %s\n",userResponse[1]);
 		printf("3: %s\n",userResponse[2]);
+		printf("Unit id is: %d\n",unitID);
+		switch (unitID){
+	    		case 0: // Converison is of type Temperature
+				printf("gonna call convert temp\n");
+				result = convertTemp(userResponse[0],userResponse[1],userResponse[2]);
+				break;
+    			case 1: // Conversion is of type Mass
+				//result = convertMass(userResponse[0],userResponse[1],userResponse[2]);
+				break;
+    			case 2: // Conversion is of type Distance
+				//result = convertDistance(userResponse[0],userResponse[1],userResponse[2]);
+				break;
+    			case 3: // Conversion is of type Time
+				//result = convertTime(userResponse[0],userResponse[1],userResponse[2]);
+				break;
+		}
+
+		printf("Result: %.2lf %s's\n",result,userResponse[1]);
 		do{
 			printf("Do you want to do another conversion? (y/n): ");
 			c = getchar();
@@ -108,6 +133,7 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
+// This helper function determines wether the input the user entered is a valid
 // Returns 1 as true and 0 as false
 int isValid(char* unit){
 
@@ -129,4 +155,28 @@ int isValid(char* unit){
 		}
 	}
 	return 0;
+}
+
+// This helper function determines wether the passed in units are compatiable for a conversion
+// Returns 1 as true and -1 as false
+int isSameUnit(char* firstUnit, char* secondUnit){
+
+	int firstUnitId, secondUnitId,i;
+
+	for(i = 0; i < NUMBER_OF_STRING;++i){
+		if(strcmp(firstUnit,units[i]) == 0){
+			firstUnitId = id[i];
+			break;
+		}
+	}
+	for(i = 0; i < NUMBER_OF_STRING;++i){
+		if(strcmp(secondUnit,units[i]) == 0){
+			secondUnitId = id[i];
+			break;
+		}
+	}
+	if(firstUnitId == secondUnitId)
+		return id[i];
+	else
+		return -1;
 }
