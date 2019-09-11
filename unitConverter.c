@@ -81,7 +81,8 @@ int main(int argc, char *argv[]){
 				}else if(isValid(userResponse[i])&& i == 1){ // Check to see if user is asking of a conversion of differnt units
 					unitID = isSameUnit(userResponse[i-1],userResponse[i]);
 					if(unitID < 0){
-						printf("Can not convert \"%s\" into \"%s\". Please type in a valid response.\n",userResponse[i-1],userResponse[i]);
+						printf("Can not convert \"%s\" into \"%s\".",userResponse[i-1],userResponse[i]);
+						printf("Please type in a valid response.\n");
 						printf("For a list of valid options type \"help\". To exit the program type \"quit\"\n");
 					}else
 						flag = 1;
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]){
 				//result = convertDistance(userResponse[0],userResponse[1],userResponse[2]);
 				break;
     			case 3: // Conversion is of type Time
-				//result = convertTime(userResponse[0],userResponse[1],userResponse[2]);
+				result = convertTime(userResponse[0],userResponse[1],userResponse[2]);
 				break;
 		}
 
@@ -175,6 +176,8 @@ int isSameUnit(char* firstUnit, char* secondUnit){
 			break;
 		}
 	}
+	printf("Id of %s is:%d\n",firstUnit,firstUnitId);
+	printf("Id of %s is:%d\n",secondUnit,secondUnitId);
 	if(firstUnitId == secondUnitId)
 		return id[i];
 	else
