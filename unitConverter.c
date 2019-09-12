@@ -9,7 +9,7 @@
 
 char units[NUMBER_OF_STRING][MAX_STRING_SIZE] = 
 { "celsius","fahrenheit","kelvin",
-  "kilogram","gram","milligram","microgram","ton","kiloton","ounce","pound","stone",
+  "kilogram","gram","milligram","microgram","metric-ton","ton","ounce","pound","stone",
   "kilometer","meter","centimeter","millimeter","inch","foot","yard","mile" ,"league",
   "second","minute","hour","day","week","month","year","decade","century"
 };
@@ -31,8 +31,8 @@ int main(int argc, char *argv[]){
 		     "| Fahrenheit    Milligram      Cubic Centimeter       Centimeter      Minute |\n"
 		     "| Kelvin        Gram           Cubic Decimeter        Meter           Hour   |\n"
 		     "|               Kilogram       Cubic Meter            Kilometer       Day    |\n"
-		     "|               Ton            Cubic Decameter        Inch            Week   |\n"
-		     "|               Kiloton        Cubic Hectometer       Foot            Month  |\n"
+		     "|               Metric-Ton     Cubic Decameter        Inch            Week   |\n"
+		     "|               Ton            Cubic Hectometer       Foot            Month  |\n"
 		     "|               Ounce          Cubic Kilometer        Yard            Year   |\n"
 		     "|               Pound          Ounce                  Mile            Decade |\n"
 		     "|               Stone          Cup                    League          Century|\n"
@@ -71,6 +71,7 @@ int main(int argc, char *argv[]){
 				for(k = 0; k < j; ++k){
 					userResponse[i][k] = tolower(userResponse[i][k]);
 				}
+				// Add function to trim any white spaces? 
 				if(strcmp(userResponse[i],"quit") == 0)
 					return 0;
 				else if(strcmp(userResponse[i],"help") == 0)
@@ -93,13 +94,12 @@ int main(int argc, char *argv[]){
 			}while(!flag);
 		}
 
-		printf("1: %s\n",userResponse[0]);
+		/*printf("1: %s\n",userResponse[0]);
 		printf("2: %s\n",userResponse[1]);
 		printf("3: %s\n",userResponse[2]);
-		printf("Unit id is: %d\n",unitID);
+		printf("Unit id is: %d\n",unitID);*/
 		switch (unitID){
 	    		case 0: // Converison is of type Temperature
-				printf("gonna call convert temp\n");
 				result = convertTemp(userResponse[0],userResponse[1],userResponse[2]);
 				break;
     			case 1: // Conversion is of type Mass
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]){
 				break;
 		}
 
-		printf("Result: %.2lf %s's\n",result,userResponse[1]);
+		printf("Result: %.3lf %s's\n",result,userResponse[1]);
 		do{
 			printf("Do you want to do another conversion? (y/n): ");
 			c = getchar();
@@ -136,17 +136,18 @@ int main(int argc, char *argv[]){
 
 // This helper function determines wether the input the user entered is a valid
 // Returns 1 as true and 0 as false
-int isValid(char* unit){
+int isValid(char *unit){
 
 	int size = strlen(unit) - 1;
 	int i;
 	char temp[MAX_STRING_SIZE];
 
-   	memset(temp, '\0', sizeof(temp));
+   	memset(temp, '\0', sizeof(temp)); 
 	if(strcmp("celsius",unit) == 0){
 		return 1;
 	}else{
 		if(unit[size] == 's'){
+			unit[size] = '\0';
 			size = size - 1;
 		}
 		strncpy(temp,unit,size+1);
@@ -159,8 +160,8 @@ int isValid(char* unit){
 }
 
 // This helper function determines wether the passed in units are compatiable for a conversion
-// Returns 1 as true and -1 as false
-int isSameUnit(char* firstUnit, char* secondUnit){
+// Returns id as true and -1 as false
+int isSameUnit(char *firstUnit, char *secondUnit){
 
 	int firstUnitId, secondUnitId,i;
 
@@ -176,8 +177,6 @@ int isSameUnit(char* firstUnit, char* secondUnit){
 			break;
 		}
 	}
-	printf("Id of %s is:%d\n",firstUnit,firstUnitId);
-	printf("Id of %s is:%d\n",secondUnit,secondUnitId);
 	if(firstUnitId == secondUnitId)
 		return id[i];
 	else
