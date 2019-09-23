@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
 				result = convertTemp(userResponse[0],userResponse[1],userResponse[2]);
 				break;
     			case 1: // Conversion is of type Mass
-				//result = convertMass(userResponse[0],userResponse[1],userResponse[2]);
+				result = convertMass(userResponse[0],userResponse[1],userResponse[2]);
 				break;
     			case 2: // Conversion is of type Distance
 				//result = convertDistance(userResponse[0],userResponse[1],userResponse[2]);
