@@ -10,7 +10,7 @@
 char units[NUMBER_OF_STRING][MAX_STRING_SIZE] = 
 { "celsius","fahrenheit","kelvin",
   "kilogram","gram","milligram","microgram","metric-ton","ton","ounce","pound","stone",
-  "kilometer","meter","centimeter","millimeter","inch","foot","yard","mile" ,"league",
+  "kilometer","meter","centimeter","millimeter","inch","foot","yard","mile" ,
   "second","minute","hour","day","week","month","year","decade","century"
 };
 
@@ -18,7 +18,7 @@ char units[NUMBER_OF_STRING][MAX_STRING_SIZE] =
 int id[30] =
 { 0, 0, 0,
   1, 1, 1, 1, 1, 1, 1, 1, 1,
-  2, 2, 2, 2, 2, 2, 2, 2, 2,
+  2, 2, 2, 2, 2, 2, 2, 2,
   3, 3, 3, 3, 3, 3, 3, 3, 3
 };
 
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]){
 		     "|               Ton            Cubic Hectometer       Foot            Month  |\n"
 		     "|               Ounce          Cubic Kilometer        Yard            Year   |\n"
 		     "|               Pound          Ounce                  Mile            Decade |\n"
-		     "|               Stone          Cup                    League          Century|\n"
+		     "|               Stone          Cup                                    Century|\n"
 		     "|                              Pint                                          |\n"
 		     "|                              Quart                                         |\n"
 		     "|                              Gallon                                        |\n"
@@ -106,7 +106,7 @@ int main(int argc, char *argv[]){
 				result = convertMass(userResponse[0],userResponse[1],userResponse[2]);
 				break;
     			case 2: // Conversion is of type Distance
-				//result = convertDistance(userResponse[0],userResponse[1],userResponse[2]);
+				result = convertDistance(userResponse[0],userResponse[1],userResponse[2]);
 				break;
     			case 3: // Conversion is of type Time
 				result = convertTime(userResponse[0],userResponse[1],userResponse[2]);

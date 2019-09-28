@@ -4,7 +4,6 @@
 #include <math.h>
 #include "header.h"
 
-// TODO add conversion between mass id's of 1 and 0
 double convertMass(char* originalUnit, char* desiredUnit, char* quantityOfUnit){
 
 	double result = 0;
@@ -30,7 +29,6 @@ double convertMass(char* originalUnit, char* desiredUnit, char* quantityOfUnit){
 		}
 	}
 
-	printf("id first:%d\nid second:%d\n",idFirst,idSecond);
 	// Converting between metric units
 	if(massID[idFirst] == 1 && massID[idSecond] ==1){
 		//Going from high to low unit of power, else vice-versa
@@ -62,7 +60,6 @@ double convertMass(char* originalUnit, char* desiredUnit, char* quantityOfUnit){
 			}else if(strcmp(desiredUnit,"pound") == 0){
 				result = temp / 1;
 			}
-
 		}else if(strcmp(originalUnit,"ton") == 0){
 			if(strcmp(desiredUnit,"pound") == 0){
 				result = temp * 2000;
@@ -73,7 +70,6 @@ double convertMass(char* originalUnit, char* desiredUnit, char* quantityOfUnit){
 			}else if(strcmp(desiredUnit,"ton") == 0){
 				result = temp / 1;
 			}
-
 		}else if(strcmp(originalUnit,"stone") == 0){
 			if(strcmp(desiredUnit,"pound") == 0){
 				result = temp * 14;
@@ -87,7 +83,109 @@ double convertMass(char* originalUnit, char* desiredUnit, char* quantityOfUnit){
 		}	
 	}else{
 		//Converting between a mixture of the two
+		if(strcmp(originalUnit,"kilogram") == 0){
+			if(strcmp(desiredUnit,"ton") == 0){
+				result = temp / 907.185;
+			}else if(strcmp(desiredUnit,"ounce") == 0){
+				result = temp * 35.274;
+			}else if(strcmp(desiredUnit,"pound") == 0){
+				result = temp * 2.205;
+			}else if(strcmp(desiredUnit,"stone") == 0){
+				result = temp / 6.35;
+			}
+		}else if(strcmp(originalUnit,"gram") == 0){
+			if(strcmp(desiredUnit,"ton") == 0){
+				result = temp / 907184.74;
+			}else if(strcmp(desiredUnit,"ounce") == 0){
+				result = temp / 28.35;
+			}else if(strcmp(desiredUnit,"pound") == 0){
+				result = temp / 453.592;
+			}else if(strcmp(desiredUnit,"stone") == 0){
+				result = temp / 6350.293;
+			}
 
+		}else if(strcmp(originalUnit,"milligram") == 0){
+			if(strcmp(desiredUnit,"ton") == 0){
+				result = temp / (9.072 * pow(10,8));
+			}else if(strcmp(desiredUnit,"ounce") == 0){
+				result = temp / 28349.523;
+			}else if(strcmp(desiredUnit,"pound") == 0){
+				result = temp / 453592.37;
+			}else if(strcmp(desiredUnit,"stone") == 0){
+				result = temp / (6.35 * pow(10,6));
+			}
+
+		}else if(strcmp(originalUnit,"microgram") == 0){
+			if(strcmp(desiredUnit,"ton") == 0){
+				result = temp / (9.072 * pow(10,11));
+			}else if(strcmp(desiredUnit,"ounce") == 0){
+				result = temp / (2.835 * pow(10,7));
+			}else if(strcmp(desiredUnit,"pound") == 0){
+				result = temp / (4.536 * pow(10,8));
+			}else if(strcmp(desiredUnit,"stone") == 0){
+				result = temp / (6.35 * pow(10,9));
+			}
+
+		}else if(strcmp(originalUnit,"metric-ton") == 0){
+			if(strcmp(desiredUnit,"ton") == 0){
+				result = temp * 1.12;
+			}else if(strcmp(desiredUnit,"ounce") == 0){
+				result = temp * 35840;
+			}else if(strcmp(desiredUnit,"pound") == 0){
+				result = temp * 2240;
+			}else if(strcmp(desiredUnit,"stone") == 0){
+				result = temp * 160;
+			}
+
+		}else if(strcmp(originalUnit,"ton") == 0){
+			if(strcmp(desiredUnit,"kilogram") == 0){
+				result = temp * 907.185;
+			}else if(strcmp(desiredUnit,"gram") == 0){
+				result = temp * 907184.74;
+			}else if(strcmp(desiredUnit,"milligram") == 0){
+				result = temp * (9.072 * pow(10,8));
+			}else if(strcmp(desiredUnit,"microgram") == 0){
+				result = temp * (9.072 * pow(10,11));
+			}else if(strcmp(desiredUnit,"metric-ton") == 0){
+				result = temp / 1.12;
+			}
+		}else if(strcmp(originalUnit,"ounce") == 0){
+			if(strcmp(desiredUnit,"kilogram") == 0){
+				result = temp / 35.274;
+			}else if(strcmp(desiredUnit,"gram") == 0){
+				result = temp * 28.35;
+			}else if(strcmp(desiredUnit,"milligram") == 0){
+				result = temp * 28349.523;
+			}else if(strcmp(desiredUnit,"microgram") == 0){
+				result = temp * (2.835 * pow(10,7));
+			}else if(strcmp(desiredUnit,"metric-ton") == 0){
+				result = temp / 35840;
+			}
+		}else if(strcmp(originalUnit,"pound") == 0){
+			if(strcmp(desiredUnit,"kilogram") == 0){
+				result = temp / 2.205;
+			}else if(strcmp(desiredUnit,"gram") == 0){
+				result = temp * 453.592;
+			}else if(strcmp(desiredUnit,"milligram") == 0){
+				result = temp * 453592.37;
+			}else if(strcmp(desiredUnit,"microgram") == 0){
+				result = temp * (4.536 * pow(10,8));
+			}else if(strcmp(desiredUnit,"metric-ton") == 0){
+				result = temp / 2240;
+			}
+		}else if(strcmp(originalUnit,"stone") == 0){
+			if(strcmp(desiredUnit,"kilogram") == 0){
+				result = temp * 6.35;
+			}else if(strcmp(desiredUnit,"gram") == 0){
+				result = temp * 6350.293;
+			}else if(strcmp(desiredUnit,"milligram") == 0){
+				result = temp * (6.35 * pow(10,6));
+			}else if(strcmp(desiredUnit,"microgram") == 0){
+				result = temp * (6.35 * pow(10,9));
+			}else if(strcmp(desiredUnit,"metric-ton") == 0){
+				result = temp / 160;
+			}
+		}
 	}
 	return result;
 }
